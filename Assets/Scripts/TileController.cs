@@ -1,46 +1,53 @@
 using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TileController : MonoBehaviour
 {
-    [SerializeField] private GameObject MyTile;
-    [SerializeField] private Tile CurrentTile;
-    [SerializeField] private int BlueAmount = 5;
-    [SerializeField] private int RedAmount = 5;
-    [SerializeField] private int YellowAmount = 5;
-    private bool TileSpawned = false;
+    [SerializeField] private GameObject menu;
+    [SerializeField] private Tile currentTile;
+    [SerializeField] private int blueAmount = 5;
+    [SerializeField] private int redAmount = 5;
+    [SerializeField] private int yellowAmount = 5;
+    [SerializeField] private GameObject blueIndicator;
+    [SerializeField] private GameObject redIndicator;
+    [SerializeField] private GameObject yellowIndicator;
+    private bool tileSpawned = false;
 
     void Start()
     {
+        menu.SetActive(false);
         for (int i = 0; i < 3; i++)
         {
             for (int j = -2; j < 3; j++)
             {
-                TileSpawned = false;
+                tileSpawned = false;
                 var position = new Vector3(2 * i - 2, j, 0);
-                while (!TileSpawned)
+                while (!tileSpawned)
                 {
                     Tile.Status status = (Tile.Status)Enum.ToObject(typeof(Tile.Status), UnityEngine.Random.Range(0, 3));
-                    if ((status == Tile.Status.Red) && (RedAmount != 0))
+                    if ((status == Tile.Status.Red) && (redAmount != 0))
                     {
-                        CurrentTile.changeStatus(Tile.Status.Red);
-                        Instantiate(CurrentTile, position, Quaternion.identity);
-                        TileSpawned = true;
-                        RedAmount--;
+                        currentTile.changeStatus(Tile.Status.Red);
+                        Instantiate(currentTile, position, Quaternion.identity);
+                        tileSpawned = true;
+                        redAmount--;
                     }
-                    if ((status == Tile.Status.Blue) && (BlueAmount != 0))
+                    if ((status == Tile.Status.Blue) && (blueAmount != 0))
                     {
-                        CurrentTile.changeStatus(Tile.Status.Blue);
-                        Instantiate(CurrentTile, position, Quaternion.identity);
-                        TileSpawned = true;
-                        BlueAmount--;
+                        currentTile.changeStatus(Tile.Status.Blue);
+                        Instantiate(currentTile, position, Quaternion.identity);
+                        tileSpawned = true;
+                        blueAmount--;
                     }
-                    if ((status == Tile.Status.Yellow) && (YellowAmount != 0))
+                    if ((status == Tile.Status.Yellow) && (yellowAmount != 0))
                     {
-                        CurrentTile.changeStatus(Tile.Status.Yellow);
-                        Instantiate(CurrentTile, position, Quaternion.identity);
-                        TileSpawned = true;
-                        YellowAmount--;
+                        currentTile.changeStatus(Tile.Status.Yellow);
+                        Instantiate(currentTile, position, Quaternion.identity);
+                        tileSpawned = true;
+                        yellowAmount--;
                     }
                 }
             }
@@ -51,8 +58,8 @@ public class TileController : MonoBehaviour
             for (int j = 0; j < 3; j++)
             {
                 var position = new Vector3(2 * i - 1, 2 * j - 2, 0);
-                CurrentTile.changeStatus(Tile.Status.Block);
-                Instantiate(CurrentTile, position, Quaternion.identity);
+                currentTile.changeStatus(Tile.Status.Block);
+                Instantiate(currentTile, position, Quaternion.identity);
             }
         }
 
@@ -61,9 +68,55 @@ public class TileController : MonoBehaviour
             for (int j = 0; j < 2; j++)
             {
                 var position = new Vector3(2 * i - 1, 2 * j - 1, 0);
-                CurrentTile.changeStatus(Tile.Status.Blank);
-                Instantiate(CurrentTile, position, Quaternion.identity);
+                currentTile.changeStatus(Tile.Status.Blank);
+                Instantiate(currentTile, position, Quaternion.identity);
             }
         }
+    }
+
+    private List<GameObject> GetTilesBelow(GameObject Indicator)
+    {
+        List<GameObject> tilesBelow = new List<GameObject>();
+        var Correcting = new Vector3(0f, -0.5f, 0f);
+        RaycastHit2D hit = Physics2D.Raycast((Indicator.transform.position + Correcting), Vector2.down);
+        for (int i = 1; i < 6; i++)
+        {
+            if (hit.collider != null)
+            {
+                tilesBelow.Add(hit.collider.gameObject);
+                hit = Physics2D.Raycast(hit.collider.gameObject.transform.position, Vector2.down);
+            }
+        }
+        return tilesBelow;
+    }
+
+    private bool areAllTilesBelowEqual()
+    {
+        List<GameObject> BlueRow = GetTilesBelow(blueIndicator);
+        List<GameObject> RedRow = GetTilesBelow(redIndicator);
+        List<GameObject> YellowRow = GetTilesBelow(yellowIndicator);
+        for (int i = 1; i < 5; i++)
+        {
+            if ((BlueRow[i].GetComponent<SpriteRenderer>().sprite != BlueRow[i - 1].GetComponent<SpriteRenderer>().sprite) ||
+                (RedRow[i].GetComponent<SpriteRenderer>().sprite != RedRow[i - 1].GetComponent<SpriteRenderer>().sprite) ||
+                (YellowRow[i].GetComponent<SpriteRenderer>().sprite != YellowRow[i - 1].GetComponent<SpriteRenderer>().sprite))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void Update()
+    {
+        if (areAllTilesBelowEqual())
+        {
+            menu.SetActive(true);
+        }
+    }
+
+    public void OnClick()
+    {
+        SceneManager.LoadScene("My Scene");
     }
 }
