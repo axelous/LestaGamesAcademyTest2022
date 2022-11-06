@@ -221,6 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68a23dd4126e7843ad0ef0d5619f2fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMovable: 1
   TileSprite: {fileID: 143225448}
   Sprites:
   - {fileID: 21300000, guid: ace2793bf14cdbd4da43556c51c30de2, type: 3}
@@ -228,7 +229,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: cb145206274118b49b61730359d7ded5, type: 3}
   - {fileID: 21300000, guid: 6e87dcd514218834c9915c76be0ab1f2, type: 3}
   - {fileID: 21300000, guid: 6a3a2e080b7cafb49939facb9b45b2ec, type: 3}
-  MyTile: {fileID: 143225447}
+  MyTile: {fileID: 0}
 --- !u!61 &143225451
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -265,7 +266,6 @@ GameObject:
   m_Component:
   - component: {fileID: 361793271}
   - component: {fileID: 361793270}
-  - component: {fileID: 361793272}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -305,19 +305,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &361793272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 361793269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9b97e3db22cf54478f20b45bf4ee483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Tile: {fileID: 143225447}
 --- !u!1 &375319206
 GameObject:
   m_ObjectHideFlags: 0

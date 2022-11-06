@@ -1,7 +1,5 @@
 using System;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TileController : MonoBehaviour
 {
@@ -67,9 +65,5 @@ public class TileController : MonoBehaviour
                 Instantiate(CurrentTile, position, Quaternion.identity);
             }
         }
-    }
-    private void Update()
-    {
-     
     }
 }
