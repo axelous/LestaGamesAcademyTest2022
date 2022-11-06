@@ -90,26 +90,36 @@ public class TileController : MonoBehaviour
         return tilesBelow;
     }
 
-    private bool areAllTilesBelowEqual()
+    private bool AreAllTilesBelowEqual()
     {
         List<GameObject> BlueRow = GetTilesBelow(blueIndicator);
         List<GameObject> RedRow = GetTilesBelow(redIndicator);
         List<GameObject> YellowRow = GetTilesBelow(yellowIndicator);
         for (int i = 1; i < 5; i++)
         {
-            if ((BlueRow[i].GetComponent<SpriteRenderer>().sprite != BlueRow[i - 1].GetComponent<SpriteRenderer>().sprite) ||
-                (RedRow[i].GetComponent<SpriteRenderer>().sprite != RedRow[i - 1].GetComponent<SpriteRenderer>().sprite) ||
+            if ((BlueRow[i].GetComponent<SpriteRenderer>().sprite != BlueRow[i - 1].GetComponent<SpriteRenderer>().sprite)
+                ||
+                (RedRow[i].GetComponent<SpriteRenderer>().sprite != RedRow[i - 1].GetComponent<SpriteRenderer>().sprite)
+                ||
                 (YellowRow[i].GetComponent<SpriteRenderer>().sprite != YellowRow[i - 1].GetComponent<SpriteRenderer>().sprite))
             {
                 return false;
             }
+        }
+        if ((BlueRow[0].GetComponent<SpriteRenderer>().sprite.name != "Blue")
+                ||
+                (RedRow[0].GetComponent<SpriteRenderer>().sprite.name != "Red")
+                ||
+                (YellowRow[0].GetComponent<SpriteRenderer>().sprite.name != "Yellow"))
+        {
+            return false;
         }
         return true;
     }
 
     private void Update()
     {
-        if (areAllTilesBelowEqual())
+        if (AreAllTilesBelowEqual())
         {
             menu.SetActive(true);
         }
